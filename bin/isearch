@@ -1,0 +1,4 @@
+#!/bin/sh
+echo -n "String to search for: "
+read ss < /dev/tty
+grep -i "$(echo "$ss" |tr ' ' _ |tr -d "',")"

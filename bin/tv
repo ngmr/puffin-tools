@@ -1,0 +1,5 @@
+#!/bin/sh
+{ 
+	ssh lurch2 find video/iplayer/tv/ -type f |sed -e 's#^#lurch2:#'
+	ssh igor find video/dvd/tv/ video/dvd2/tv/ -type f |sed -e 's#^#igor:#'
+} |env LANG=C sort

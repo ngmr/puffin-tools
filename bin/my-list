@@ -1,0 +1,43 @@
+#!/bin/bash
+
+params2nl() (
+	while [ "$1" ]; do echo "$1"; shift; done
+)
+
+add_locs() {
+	while [ "$1" ]; do
+		export locs="$locs${locs:+$'\n'}$1"
+		shift
+	done
+}
+
+while [ "$1" ]; do
+	case "$1" in
+		"tv")
+			LL="$([ -z "$LL" ] || echo "$LL"; params2nl "lurch2:video/iplayer/tv/" "igor:video/dvd/tv/" "igor:video/dvd2/tv/")"
+			;;
+		"factual")
+			LL="$([ -z "$LL" ] || echo "$LL"; params2nl "kato:video/iplayer/factual/")"
+			;;
+		"movies")
+			LL="$([ -z "$LL" ] || echo "$LL"; params2nl "igor:video/dvd/film/" "igor:video/dvd2/film/" "igor:video/iplayer/film/")"
+			;;
+		"documentary"|"documentaries")
+			LL="$([ -z "$LL" ] || echo "$LL"; params2nl "igor:video/dvd2/documentaries/" "igor:video/iplayer/documentary/" "igor:video/iplayer/documentaries/")"
+			;;
+	esac
+	shift
+done
+
+echo "$LL"
+exit
+
+
+
+{ 
+	ssh lurch2 find video/iplayer/tv/ -type f |sed -e 's#^#lurch2:#'
+	ssh igor find video/dvd/tv/ video/dvd2/tv/ -type f |sed -e 's#^#igor:#'
+} |env LANG=C sort
+ssh igor find video/dvd/film/ video/dvd2/film/ video/iplayer/film/ -type f |sed -e 's#^#igor:#' |env LANG=C sort
+ssh igor find video/dvd2/documentaries/ video/iplayer/documenraries/ video/iplayer/documentary/ -type f |sed -e 's#^#igor:#' |env LANG=C sort
+ssh kato find video/iplayer/factual/ -type f |sed -e 's#^#kato:#' |env LANG=C sort

@@ -1,0 +1,2 @@
+#!/bin/sh
+ssh igor find video/dvd2/documentaries/ video/iplayer/documenraries/ video/iplayer/documentary/ -type f |sed -e 's#^#igor:#' |env LANG=C sort

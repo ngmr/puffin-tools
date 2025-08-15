@@ -1,0 +1,2 @@
+#!/bin/sh
+ssh kato find video/iplayer/factual/ -type f |sed -e 's#^#kato:#' |env LANG=C sort
